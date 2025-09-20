@@ -2,18 +2,19 @@ from typing import List
 from .base import DatabaseInterface
 from .namus import NamUsInterface
 from .doenetwork import DoeNetworkInterface
+from .fbijanedoe import FBIJaneDoeInterface
 from ..models import PersonRecord, SearchCriteria
+
 
 
 class DatabaseManager:
     """Manages multiple database interfaces"""
-    
     def __init__(self, use_mock_data: bool = False):
         self.databases = {}
-        
         # Add real databases
         self.databases['NamUs'] = NamUsInterface()
         self.databases['DoeNetwork'] = DoeNetworkInterface()
+        self.databases['FBIJaneDoe'] = FBIJaneDoeInterface()
     
     def get_available_databases(self) -> List[str]:
         """Get list of available database names"""
