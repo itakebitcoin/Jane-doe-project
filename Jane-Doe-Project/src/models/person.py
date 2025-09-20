@@ -102,7 +102,7 @@ class SearchCriteria:
         if self.location is None:
             self.location = Location()
         if self.databases is None:
-            self.databases = ["MockDB", "NamUs", "DoeNetwork"]
+            self.databases = ["NamUs", "DoeNetwork"]
 
 
 @dataclass
