@@ -204,10 +204,10 @@ class MatchingEngine:
                 scores.append(1.0)
                 reasons.append("Exact state match")
             else:
-                # Fuzzy match for state names
+                # Fuzzy match for state names and abbreviations
                 state_score = fuzz.ratio(criteria_location.state.lower(), 
                                        record_location.state.lower()) / 100.0
-                if state_score > 0.8:
+                if state_score > 0.3:  # Lower threshold for state abbreviations
                     scores.append(state_score)
                     reasons.append(f"Similar state match (score: {state_score:.2f})")
         

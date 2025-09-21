@@ -2,19 +2,17 @@ from typing import List
 from .base import DatabaseInterface
 from .namus import NamUsInterface
 from .doenetwork import DoeNetworkInterface
-from .fbijanedoe import FBIJaneDoeInterface
 from ..models import PersonRecord, SearchCriteria
-
 
 
 class DatabaseManager:
     """Manages multiple database interfaces"""
-    def __init__(self, use_mock_data: bool = False):
+    def __init__(self):
         self.databases = {}
+        
         # Add real databases
         self.databases['NamUs'] = NamUsInterface()
         self.databases['DoeNetwork'] = DoeNetworkInterface()
-        self.databases['FBIJaneDoe'] = FBIJaneDoeInterface()
     
     def get_available_databases(self) -> List[str]:
         """Get list of available database names"""
@@ -28,8 +26,20 @@ class DatabaseManager:
         """Search all available databases"""
         all_records = []
         
-        # Determine which databases to search
-        databases_to_search = criteria.databases if criteria.databases else self.get_available_databases()
+        # Determine which databases to search - if the specified databases 
+        # aren't available, use all available databases
+        if criteria.databases:
+            # Check if any of the requested databases are actually available
+            available_dbs = self.get_available_databases()
+            requested_and_available = [db for db in criteria.databases if db in available_dbs]
+            
+            if requested_and_available:
+                databases_to_search = requested_and_available
+            else:
+                # None of the requested databases are available, use all available
+                databases_to_search = available_dbs
+        else:
+            databases_to_search = self.get_available_databases()
         
         for db_name in databases_to_search:
             if db_name in self.databases:
